@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100" data-bs-theme="auto">
+<head>
+    <title>Math Games</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Maksym Ivanov>">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <style>
+        .btn-close.size {
+            font-size: 1.2em;
+        }
+
+        .item-value-one {
+            display: inline-block;
+            width: 27px;
+            margin-right: 15px;
+        }
+
+        .item-value-two {
+            display: inline-block;
+            width: 25px;
+            margin-right: 5px;
+        }
+
+        .item-equal {
+            margin-right: 15px;
+        }
+
+        .item-result {
+
+        }
+    </style>
+</head>
+<body class="d-flex h-100 text-center text-bg-dark">
+
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <header class="mb-auto">
+        </header>
+
+        <main class="px-md-3">
+            <div class="modal modal-sheet position-static d-block p-md-4 py-md-5 text-body" tabindex="-1" role="dialog" id="modalTour">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content rounded-4 shadow">
+                        <div class="modal-body p-md-5">
+                            <div class="d-flex justify-content-end mb-2">
+                                <a href="/" type="button" class="btn-close size"></a>
+                            </div>
+
+                            <div class="container my-5">
+                                <div class="row mb-3">
+                                    <div id="expression-id" class="col text-end pe-0">
+                                    </div>
+                                    <div id="result-id" class="col text-start ps-2">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container text-center mt-3">
+                                <div class="row mt-3">
+                                    <div class="col ps-0">
+                                        <a href="" id="next-study-id" type="button" class="btn btn-text-size btn-primary w-100 result">Вчити</a>
+                                    </div>
+                                    <div class="col pe-0">
+                                        <a href="" id="next-train-id" type="button" class="btn btn-text-size btn-primary w-100 result">Тренувати</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="mt-auto text-white-50">
+        </footer>
+    </div>
+
+    <script src="assets/bootstrap.min.js?v=1.2"></script>
+    <script src="assets/jquery.min.js?v=1.2"></script>
+    <script src="assets/tasks.js?v=1.2"></script>
+    <script>
+        urlParams = new URLSearchParams(window.location.search);
+        let action = urlParams.get('action');
+        let type = urlParams.get('type');
+        let reverse = urlParams.get('reverse');
+
+        let tasks = [];
+
+        if ('sum' === action) {
+            tasks = new Sum(parseInt(type), 10, null).listAllSingle();
+        } else if ('sub' === action) {
+            tasks = new Sub(parseInt(type), 10, null).listAllSingle();
+        } else if ('multiply' === action) {
+            tasks = new Multiply(parseInt(type), 10, null).listAllSingle();
+        }
+
+        let expressionEl = $('#expression-id');
+        let resultEl = $('#result-id');
+
+        for (const task of tasks) {
+            let one = 'true' === reverse ? task.getX() : task.getY();
+            let two = 'true' === reverse ? task.getY() : task.getX();
+
+            expressionEl.append('<div class="mb-2"><span class="item-value-one">' + one + '</span><span>' + task.getOperator() + '</span><span class="item-value-two">' + two + '</span></div>');
+            resultEl.append('<div class="mb-2"><span class="item-equal">=</span><span class="item-result">' + task.getResult() + '</span></div>');
+        }
+
+        $('#next-study-id').attr('href', 'game.html?action=' + action + '&type=' + type);
+        $('#next-train-id').attr('href', 'game.html?action=' + action + '&type=' + type + '&shuffle=true');
+    </script>
+</body>
+</html>
